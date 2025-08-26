@@ -1,0 +1,25 @@
+{
+  "name": "@t8/webapp-build",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/run.js",
+  "bin": {
+    "webapp-build": "dist/run.js"
+  },
+  "scripts": {
+    "build": "npx npm-run-all clean compile",
+    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "compile": "esbuild src/run.ts --bundle --outdir=dist --platform=node --external:esbuild",
+    "prepublishOnly": "npm run build",
+    "preversion": "npm run build"
+  },
+  "author": "axtk",
+  "license": "ISC",
+  "dependencies": {
+    "@t8/date-format": "^1.0.1",
+    "esbuild": "^0.25.9"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0"
+  }
+}
