@@ -17,5 +17,5 @@ export async function build(params: BuildParams) {
     ]);
     await finalize(params);
 
-    log(`${phase} completed +${formatDuration(Date.now() - startTime)})`);
+    log(`${phase} completed +${formatDuration(Date.now() - startTime)}`);
 }
