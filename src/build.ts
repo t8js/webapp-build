@@ -7,8 +7,9 @@ import {finalize} from './utils/finalize';
 export async function build(params: BuildParams) {
     let startTime = Date.now();
     let log = params.silent ? (() => {}) : console.log;
+    let phase = params.init ? 'Initialization' : 'Build';
 
-    log('Build started');
+    log(`${phase} started`);
 
     await Promise.all([
         buildServer(params),
@@ -16,5 +17,5 @@ export async function build(params: BuildParams) {
     ]);
     await finalize(params);
 
-    log(`Build completed (build time: ${formatDuration(Date.now() - startTime)})`);
+    log(`${phase} completed +${formatDuration(Date.now() - startTime)})`);
 }
