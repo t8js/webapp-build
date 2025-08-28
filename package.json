@@ -16,7 +16,7 @@
   "author": "axtk",
   "license": "ISC",
   "dependencies": {
-    "@t8/date-format": "^1.0.1",
+    "@t8/date-format": "^1.0.3",
     "esbuild": "^0.25.9"
   },
   "devDependencies": {
