@@ -13,6 +13,10 @@
     "prepublishOnly": "npm run build",
     "preversion": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t8js/webapp-build.git"
+  },
   "author": "axtk",
   "license": "ISC",
   "dependencies": {
