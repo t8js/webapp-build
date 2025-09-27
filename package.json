@@ -11,7 +11,8 @@
     "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
     "compile": "esbuild src/run.ts --bundle --outdir=dist --platform=node --external:esbuild",
     "prepublishOnly": "npm run build",
-    "preversion": "npx npm-run-all typecheck build",
+    "preversion": "npx npm-run-all typecheck shape build",
+    "shape": "npx codeshape",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
