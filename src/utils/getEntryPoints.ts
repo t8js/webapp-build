@@ -16,7 +16,9 @@ export async function getEntryPoints(
       entries.map(async (name) => {
         let resolvedPath = await getFirstAvailable(`src/entries/${name}`, path);
 
-        return resolvedPath === undefined ? undefined : { name, path: resolvedPath };
+        return resolvedPath === undefined
+          ? undefined
+          : { name, path: resolvedPath };
       }),
     )
   ).filter((item) => item !== undefined);
