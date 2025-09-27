@@ -17,21 +17,21 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
   let initPath = `src/entries/init_${Math.random().toString(36).slice(2)}.ts`;
 
   await Promise.all([
-    ...(init ? [] : serverEntries).map(({ entry, path }) =>
+    ...(init ? [] : serverEntries).map(({ name, path }) =>
       esbuild.build({
         entryPoints: [path],
         bundle: true,
-        outfile: `${targetDir}/entries/${entry}/server.js`,
+        outfile: `${targetDir}/entries/${name}/server.js`,
         platform: "node",
         external,
         ...commonBuildOptions,
       }),
     ),
-    ...initEntries.map(({ entry, path }) =>
+    ...initEntries.map(({ name, path }) =>
       esbuild.build({
         entryPoints: [path],
         bundle: true,
-        outfile: `${targetDir}/entries/${entry}/init.js`,
+        outfile: `${targetDir}/entries/${name}/init.js`,
         platform: "node",
         external,
         ...commonBuildOptions,

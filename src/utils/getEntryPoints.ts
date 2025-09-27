@@ -2,21 +2,21 @@ import { getEntries } from "./getEntries";
 import { getFirstAvailable } from "./getFirstAvailable";
 
 type EntryPoint = {
-  entry: string;
+  name: string;
   path: string;
 };
 
 export async function getEntryPoints(
-  name: string | string[],
+  path: string | string[],
 ): Promise<EntryPoint[]> {
   let entries = await getEntries();
 
   return (
     await Promise.all(
-      entries.map(async (entry) => {
-        let path = await getFirstAvailable(`src/entries/${entry}`, name);
+      entries.map(async (name) => {
+        let resolvedPath = await getFirstAvailable(`src/entries/${name}`, path);
 
-        return path === undefined ? undefined : { entry, path };
+        return resolvedPath === undefined ? undefined : { name, path: resolvedPath };
       }),
     )
   ).filter((item) => item !== undefined);

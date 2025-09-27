@@ -4,13 +4,13 @@ import { entryExtensions } from "../const/entryExtensions";
 
 export async function getFirstAvailable(
   dirPath: string,
-  name: string | string[],
+  path: string | string[],
 ) {
-  let names = Array.isArray(name) ? name : [name];
+  let paths = Array.isArray(path) ? path : [path];
 
-  for (let fileName of names) {
+  for (let filePath of paths) {
     for (let ext of entryExtensions) {
-      let path = join(process.cwd(), dirPath, `${fileName}.${ext}`);
+      let path = join(process.cwd(), dirPath, `${filePath}.${ext}`);
 
       try {
         await access(path);
