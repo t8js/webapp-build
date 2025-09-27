@@ -46,17 +46,17 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
           if (serverEntries.length === 0)
             tail.push(
               "\n// Returns all `server` exports from `src/entries/*/server(/index)?.(js|ts)`" +
-                "\nexport let entries = [];",
+                "\nexport const entries = [];",
             );
           else {
-            tail.push("\nexport let entries = [");
+            tail.push("\nexport const entries = [");
 
             for (let i = 0; i < serverEntries.length; i++) {
               head.push(
-                `import {server as server${i}} from ` +
-                  `'${toImportPath(serverEntries[i].path, "src/server")}';`,
+                `import { server as server${i} } from ` +
+                  `"${toImportPath(serverEntries[i].path, "src/server")}";`,
               );
-              tail.push(`    server${i},`);
+              tail.push(`  server${i},`);
             }
 
             tail.push("];");
@@ -79,17 +79,17 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
 
           if (initEntries.length === 0) tail.push("(/* async */ () => {})();");
           else {
-            tail.push("\n(async () => {" + "\n    await Promise.all([");
+            tail.push("\n(async () => {" + "\n  await Promise.all([");
 
             for (let i = 0; i < initEntries.length; i++) {
               head.push(
-                `import {init as init${i}} from ` +
-                  `'${toImportPath(initEntries[i].path, "src/entries")}';`,
+                `import { init as init${i} } from ` +
+                  `"${toImportPath(initEntries[i].path, "src/entries")}";`,
               );
-              tail.push(`        init${i}(),`);
+              tail.push(`    init${i}(),`);
             }
 
-            tail.push("    ]);\n})();");
+            tail.push("  ]);\n})();");
           }
 
           return writeModifiedFile(
