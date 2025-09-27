@@ -1,16 +1,11 @@
-import {readFile, writeFile} from 'node:fs/promises';
+import { readFile, writeFile } from "node:fs/promises";
 
-export async function writeModifiedFile(
-    path: string,
-    content: string,
-) {
-    try {
-        let prevContent = (await readFile(path)).toString();
+export async function writeModifiedFile(path: string, content: string) {
+  try {
+    let prevContent = (await readFile(path)).toString();
 
-        if (content === prevContent)
-            return;
-    }
-    catch {}
+    if (content === prevContent) return;
+  } catch {}
 
-    return writeFile(path, content);
+  return writeFile(path, content);
 }

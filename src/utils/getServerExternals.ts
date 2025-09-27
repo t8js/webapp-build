@@ -1,5 +1,5 @@
-import type {PackageJSON} from '../types/PackageJSON';
-import {readJSON} from './readJSON';
+import type { PackageJSON } from "../types/PackageJSON";
+import { readJSON } from "./readJSON";
 
 let cachedExternals: string[] | undefined;
 
@@ -15,33 +15,33 @@ let cachedExternals: string[] | undefined;
  * (by effectively allowing to bundle module-type dependencies).
  */
 export async function getServerExternals() {
-    if (!cachedExternals) {
-        let {
-            dependencies = {},
-            devDependencies = {},
-            peerDependencies = {},
-            optionalDependencies = {},
-        } = await readJSON<PackageJSON>('package.json');
+  if (!cachedExternals) {
+    let {
+      dependencies = {},
+      devDependencies = {},
+      peerDependencies = {},
+      optionalDependencies = {},
+    } = await readJSON<PackageJSON>("package.json");
 
-        let deps = new Set([
-            ...Object.keys(dependencies),
-            ...Object.keys(devDependencies),
-            ...Object.keys(peerDependencies),
-            ...Object.keys(optionalDependencies),
-        ]);
+    let deps = new Set([
+      ...Object.keys(dependencies),
+      ...Object.keys(devDependencies),
+      ...Object.keys(peerDependencies),
+      ...Object.keys(optionalDependencies),
+    ]);
 
-        let nonModuleDeps = await Promise.all(
-            Array.from(deps).map(async name => {
-                let {type} = await readJSON<PackageJSON>(
-                    `node_modules/${name}/package.json`,
-                );
-
-                return type === 'module' ? undefined : name;
-            }),
+    let nonModuleDeps = await Promise.all(
+      Array.from(deps).map(async (name) => {
+        let { type } = await readJSON<PackageJSON>(
+          `node_modules/${name}/package.json`,
         );
 
-        cachedExternals = nonModuleDeps.filter(name => name !== undefined);
-    }
+        return type === "module" ? undefined : name;
+      }),
+    );
 
-    return cachedExternals;
+    cachedExternals = nonModuleDeps.filter((name) => name !== undefined);
+  }
+
+  return cachedExternals;
 }

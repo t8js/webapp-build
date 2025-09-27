@@ -1,1 +1,1 @@
-export const entryExtensions = ['js', 'jsx', 'ts', 'tsx'];
+export const entryExtensions = ["js", "jsx", "ts", "tsx"];
