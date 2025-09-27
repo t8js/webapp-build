@@ -56,7 +56,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
                 `import { server as server${i} } from ` +
                   `"${toImportPath(serverEntries[i].path, "src/server")}";`,
               );
-              tail.push(`  server${i},`);
+              tail.push(`  server${i}, // ${serverEntries[i].name}`);
             }
 
             tail.push("];");
