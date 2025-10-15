@@ -20,7 +20,7 @@
     "url": "git+https://github.com/t8js/webapp-build.git"
   },
   "author": "axtk",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.3.0",
     "typescript": "^5.9.2"
