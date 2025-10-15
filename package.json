@@ -22,11 +22,11 @@
   "author": "axtk",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^24.3.0",
-    "typescript": "^5.9.2"
+    "@types/node": "^24.7.2",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@t8/date-format": "^1.0.7",
-    "esbuild": "^0.25.10"
+    "@t8/date-format": "^1.0.8",
+    "esbuild": "^0.25.11"
   }
 }
