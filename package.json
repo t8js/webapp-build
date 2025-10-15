@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npx npm-run-all clean compile",
-    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
     "compile": "esbuild src/run.ts --bundle --outdir=dist --platform=node --external:esbuild",
     "prepublishOnly": "npm run build",
     "preversion": "npx npm-run-all typecheck shape build",
