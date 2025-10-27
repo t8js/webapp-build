@@ -13,6 +13,7 @@ export async function buildClient({ publicAssetsDir }: BuildParams) {
         entryPoints: [path],
         bundle: true,
         splitting: true,
+        format: "esm",
         outdir: `${publicAssetsDir}/-/${name}`,
         minify: process.env.NODE_ENV !== "development",
       }),

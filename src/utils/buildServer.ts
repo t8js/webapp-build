@@ -1,4 +1,5 @@
-import { access, unlink } from "node:fs/promises";
+import { access, mkdir, unlink, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import esbuild from "esbuild";
 import { commonBuildOptions } from "../const/commonBuildOptions";
 import type { BuildParams } from "../types/BuildParams";
@@ -62,7 +63,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
             tail.push("];");
           }
 
-          return writeModifiedFile(
+          await writeModifiedFile(
             "src/server/entries.ts",
             "// Populated automatically during the build phase\n" +
               head.join("\n") +
@@ -92,7 +93,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
             tail.push("  ]);\n})();");
           }
 
-          return writeModifiedFile(
+          await writeModifiedFile(
             initPath,
             "// Populated automatically during the build phase\n" +
               head.join("\n") +
@@ -112,21 +113,42 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
           bundle: false,
           outfile: `${targetDir}/entries/init.js`,
           platform: "node",
-          format: "cjs",
           banner: {
             js: "// Calls all `init` exports from `src/entries/*/init(/index)?.(js|ts)`",
           },
         }),
     init
       ? null
-      : esbuild.build({
-          ...commonBuildOptions,
-          entryPoints: ["src/server/index.ts"],
-          bundle: true,
-          outfile: `${targetDir}/server/index.js`,
-          platform: "node",
-          external: [...external, "../entries/*"],
-        }),
+      : (async () => {
+          let result = await esbuild.build({
+            ...commonBuildOptions,
+            entryPoints: ["src/server/index.ts"],
+            bundle: true,
+            outfile: `${targetDir}/server/index.js`,
+            platform: "node",
+            external: [...external, "../entries/*"],
+            write: false,
+          });
+
+          return Promise.all(
+            (result.outputFiles ?? []).map(async ({ path, text }) => {
+              let dir = dirname(path);
+              let s = text.replace(
+                /( from "\.\.\/entries\/[^\/]+\/server)"/g,
+                "$1.js\"",
+              );
+
+              try {
+                await access(dir);
+              }
+              catch {
+                await mkdir(dir, { recursive: true });
+              }
+
+              await writeFile(path, s);
+            }),
+          );
+        })(),
   ]);
 
   try {
