@@ -19,22 +19,22 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
   await Promise.all([
     ...(init ? [] : serverEntries).map(({ name, path }) =>
       esbuild.build({
+        ...commonBuildOptions,
         entryPoints: [path],
         bundle: true,
         outfile: `${targetDir}/entries/${name}/server.js`,
         platform: "node",
         external,
-        ...commonBuildOptions,
       }),
     ),
     ...initEntries.map(({ name, path }) =>
       esbuild.build({
+        ...commonBuildOptions,
         entryPoints: [path],
         bundle: true,
         outfile: `${targetDir}/entries/${name}/init.js`,
         platform: "node",
         external,
-        ...commonBuildOptions,
       }),
     ),
     skipInit

@@ -1,6 +1,7 @@
 import type { BuildOptions } from "esbuild";
 
 export const commonBuildOptions: Partial<BuildOptions> = {
+  format: "esm",
   jsx: "automatic",
   jsxDev: process.env.NODE_ENV === "development",
   loader: {

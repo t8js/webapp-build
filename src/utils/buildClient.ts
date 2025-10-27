@@ -9,13 +9,12 @@ export async function buildClient({ publicAssetsDir }: BuildParams) {
   await Promise.all(
     clientEntries.map(({ name, path }) =>
       esbuild.build({
+        ...commonBuildOptions,
         entryPoints: [path],
         bundle: true,
         splitting: true,
-        format: "esm",
         outdir: `${publicAssetsDir}/-/${name}`,
         minify: process.env.NODE_ENV !== "development",
-        ...commonBuildOptions,
       }),
     ),
   );
