@@ -1,5 +1,4 @@
-import { access, mkdir, unlink, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { access, unlink } from "node:fs/promises";
 import esbuild from "esbuild";
 import { commonBuildOptions } from "../const/commonBuildOptions";
 import type { BuildParams } from "../types/BuildParams";
@@ -119,36 +118,14 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
         }),
     init
       ? null
-      : (async () => {
-          let result = await esbuild.build({
-            ...commonBuildOptions,
-            entryPoints: ["src/server/index.ts"],
-            bundle: true,
-            outfile: `${targetDir}/server/index.js`,
-            platform: "node",
-            external: [...external, "../entries/*"],
-            write: false,
-          });
-
-          return Promise.all(
-            (result.outputFiles ?? []).map(async ({ path, text }) => {
-              let dir = dirname(path);
-              let s = text.replace(
-                /( from "\.\.\/entries\/[^\/]+\/server)"/g,
-                "$1.js\"",
-              );
-
-              try {
-                await access(dir);
-              }
-              catch {
-                await mkdir(dir, { recursive: true });
-              }
-
-              await writeFile(path, s);
-            }),
-          );
-        })(),
+      : esbuild.build({
+          ...commonBuildOptions,
+          entryPoints: ["src/server/index.ts"],
+          bundle: true,
+          outfile: `${targetDir}/server/index.js`,
+          platform: "node",
+          external: [...external, "../entries/*"],
+        }),
   ]);
 
   try {
