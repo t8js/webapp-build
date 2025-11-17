@@ -1,4 +1,4 @@
-import { access, unlink } from "node:fs/promises";
+import { access, mkdir, rm } from "node:fs/promises";
 import esbuild from "esbuild";
 import { commonBuildOptions } from "../const/commonBuildOptions.ts";
 import type { BuildParams } from "../types/BuildParams.ts";
@@ -14,7 +14,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
     getServerExternals(),
   ]);
 
-  let initPath = `src/entries/init_${Math.random().toString(36).slice(2)}.ts`;
+  let initDir = `src/entries/_init_${Math.random().toString(36).slice(2)}`;
 
   await Promise.all([
     skipInit
@@ -31,7 +31,8 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
             tail.push("\nexport const entries = (await Promise.all([");
 
             for (let i = 0; i < serverEntries.length; i++)
-              tail.push(`  import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
+              tail.push(`  // ${serverEntries[i].name}
+  import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
 
             tail.push("])).map(({ server }) => server);");
           }
@@ -48,14 +49,32 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
       : (async () => {
           let tail: string[] = [];
 
-          if (initEntries.length === 0) tail.push("(/* async */ () => {})();");
+          try {
+            await access(initDir);
+          } catch {
+            await mkdir(initDir);
+          }
+
+          if (initEntries.length === 0) tail.push("\n(/* async */ () => {})();");
           else {
-            tail.push("\n(async () => {" + "\n  await Promise.all([");
+            tail.push(`
+function run(module: unknown) {
+  if (
+    module &&
+    typeof module === "object" &&
+    "init" in module &&
+    typeof module.init === "function"
+  )
+    return module.init();
+}
+
+(async () => {
+  await Promise.all([`);
 
             for (let i = 0; i < initEntries.length; i++) {
               tail.push(
-                `    import("${toImportPath(initEntries[i].path, "src/entries")}")
-      .then(({ init }) => init()),`,
+                `    // ${initEntries[i].name}
+    import("${toImportPath(initEntries[i].path, initDir)}").then(run),`,
               );
             }
 
@@ -63,7 +82,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
           }
 
           await writeModifiedFile(
-            initPath,
+            `${initDir}/index.ts`,
             "// Populated automatically during the build phase" +
               tail.join("\n") +
               "\n",
@@ -76,7 +95,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
       ? null
       : esbuild.build({
           ...commonBuildOptions,
-          entryPoints: [initPath],
+          entryPoints: [`${initDir}/index.ts`],
           bundle: true,
           splitting: true,
           outdir: `${targetDir}/init`,
@@ -101,7 +120,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
   ]);
 
   try {
-    await access(initPath);
-    await unlink(initPath);
+    await access(initDir);
+    await rm(initDir, { force: true, recursive: true });
   } catch {}
 }
