@@ -1,7 +1,8 @@
 {
   "include": ["src"],
   "compilerOptions": {
-    "noEmit": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "outDir": "dist",
     "lib": ["ESNext"],
     "target": "ESNext",
