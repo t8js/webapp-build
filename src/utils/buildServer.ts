@@ -34,7 +34,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
               tail.push(`    // ${serverEntries[i].name}
     import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
 
-            tail.push("  ]),\n).map(({ server }) => server);");
+            tail.push("  ])\n).map(({ server }) => server);");
           }
 
           await writeModifiedFile(
