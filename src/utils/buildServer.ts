@@ -17,30 +17,9 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
   let initPath = `src/entries/init_${Math.random().toString(36).slice(2)}.ts`;
 
   await Promise.all([
-    ...(init ? [] : serverEntries).map(({ name, path }) =>
-      esbuild.build({
-        ...commonBuildOptions,
-        entryPoints: [path],
-        bundle: true,
-        outfile: `${targetDir}/entries/${name}/server.js`,
-        platform: "node",
-        external,
-      }),
-    ),
-    ...initEntries.map(({ name, path }) =>
-      esbuild.build({
-        ...commonBuildOptions,
-        entryPoints: [path],
-        bundle: true,
-        outfile: `${targetDir}/entries/${name}/init.js`,
-        platform: "node",
-        external,
-      }),
-    ),
     skipInit
       ? null
       : (async () => {
-          let head: string[] = [];
           let tail: string[] = [];
 
           if (serverEntries.length === 0)
@@ -49,24 +28,17 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
                 "\nexport const entries = [];",
             );
           else {
-            tail.push("\nexport const entries = [");
+            tail.push("\nexport const entries = (await Promise.all([");
 
-            for (let i = 0; i < serverEntries.length; i++) {
-              head.push(
-                `import { server as server${i} } from ` +
-                  `"${toImportPath(serverEntries[i].path, "src/server")}";`,
-              );
-              tail.push(`  // ${serverEntries[i].name}\n  server${i},`);
-            }
+            for (let i = 0; i < serverEntries.length; i++)
+              tail.push(`  import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
 
-            tail.push("];");
+            tail.push("])).map(({ server }) => server);");
           }
 
           await writeModifiedFile(
             "src/server/entries.ts",
-            "// Populated automatically during the build phase\n" +
-              head.join("\n") +
-              "\n" +
+            "// Populated automatically during the build phase" +
               tail.join("\n") +
               "\n",
           );
@@ -74,7 +46,6 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
     skipInit
       ? null
       : (async () => {
-          let head: string[] = [];
           let tail: string[] = [];
 
           if (initEntries.length === 0) tail.push("(/* async */ () => {})();");
@@ -82,11 +53,10 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
             tail.push("\n(async () => {" + "\n  await Promise.all([");
 
             for (let i = 0; i < initEntries.length; i++) {
-              head.push(
-                `import { init as init${i} } from ` +
-                  `"${toImportPath(initEntries[i].path, "src/entries")}";`,
+              tail.push(
+                `    import("${toImportPath(initEntries[i].path, "src/entries")}")
+      .then(({ init }) => init()),`,
               );
-              tail.push(`    init${i}(),`);
             }
 
             tail.push("  ]);\n})();");
@@ -94,9 +64,7 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
 
           await writeModifiedFile(
             initPath,
-            "// Populated automatically during the build phase\n" +
-              head.join("\n") +
-              "\n" +
+            "// Populated automatically during the build phase" +
               tail.join("\n") +
               "\n",
           );
@@ -109,9 +77,11 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
       : esbuild.build({
           ...commonBuildOptions,
           entryPoints: [initPath],
-          bundle: false,
-          outfile: `${targetDir}/entries/init.js`,
+          bundle: true,
+          splitting: true,
+          outdir: `${targetDir}/init`,
           platform: "node",
+          format: "esm",
           banner: {
             js: "// Calls all `init` exports from `src/entries/*/init(/index)?.(js|ts)`",
           },
@@ -122,9 +92,11 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
           ...commonBuildOptions,
           entryPoints: ["src/server/index.ts"],
           bundle: true,
-          outfile: `${targetDir}/server/index.js`,
+          splitting: true,
+          outdir: `${targetDir}/server`,
           platform: "node",
-          external: [...external, "../entries/*"],
+          format: "esm",
+          external,
         }),
   ]);
 
