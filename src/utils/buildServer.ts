@@ -55,7 +55,8 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
             await mkdir(initDir);
           }
 
-          if (initEntries.length === 0) tail.push("\n(/* async */ () => {})();");
+          if (initEntries.length === 0)
+            tail.push("\n(/* async */ () => {})();");
           else {
             tail.push(`
 function run(module: unknown) {
