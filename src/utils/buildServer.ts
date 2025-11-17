@@ -28,13 +28,13 @@ export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
                 "\nexport const entries = [];",
             );
           else {
-            tail.push("\nexport const entries = (await Promise.all([");
+            tail.push("\nexport const entries = (\n  await Promise.all([");
 
             for (let i = 0; i < serverEntries.length; i++)
-              tail.push(`  // ${serverEntries[i].name}
-  import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
+              tail.push(`    // ${serverEntries[i].name}
+    import("${toImportPath(serverEntries[i].path, "src/server")}"),`);
 
-            tail.push("])).map(({ server }) => server);");
+            tail.push("  ]),\n).map(({ server }) => server);");
           }
 
           await writeModifiedFile(
