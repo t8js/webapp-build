@@ -1,6 +1,6 @@
 import { access, mkdir, rename } from "node:fs/promises";
-import type { BuildParams } from "../types/BuildParams";
-import { getEntries } from "./getEntries";
+import type { BuildParams } from "../types/BuildParams.ts";
+import { getEntries } from "./getEntries.ts";
 
 export async function finalize({ targetDir, publicAssetsDir }: BuildParams) {
   let serverCSSFiles = (

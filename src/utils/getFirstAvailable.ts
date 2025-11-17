@@ -1,6 +1,6 @@
 import { access } from "node:fs/promises";
 import { join } from "node:path";
-import { entryExtensions } from "../const/entryExtensions";
+import { entryExtensions } from "../const/entryExtensions.ts";
 
 export async function getFirstAvailable(
   dirPath: string,

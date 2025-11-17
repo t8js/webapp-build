@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { rm } from "node:fs/promises";
-import { build } from "./build";
-import type { BuildParams } from "./types/BuildParams";
+import { build } from "./build.ts";
+import type { BuildParams } from "./types/BuildParams.ts";
 
 const defaultTargetDir = "dist";
 

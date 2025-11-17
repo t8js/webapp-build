@@ -1,5 +1,5 @@
-import type { PackageJSON } from "../types/PackageJSON";
-import { readJSON } from "./readJSON";
+import type { PackageJSON } from "../types/PackageJSON.ts";
+import { readJSON } from "./readJSON.ts";
 
 let cachedExternals: string[] | undefined;
 

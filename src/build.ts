@@ -1,8 +1,8 @@
 import { formatDuration } from "@t8/date-format";
-import type { BuildParams } from "./types/BuildParams";
-import { buildClient } from "./utils/buildClient";
-import { buildServer } from "./utils/buildServer";
-import { finalize } from "./utils/finalize";
+import type { BuildParams } from "./types/BuildParams.ts";
+import { buildClient } from "./utils/buildClient.ts";
+import { buildServer } from "./utils/buildServer.ts";
+import { finalize } from "./utils/finalize.ts";
 
 export async function build(params: BuildParams) {
   let startTime = Date.now();

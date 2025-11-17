@@ -1,11 +1,13 @@
 {
   "include": ["src"],
   "compilerOptions": {
+    "noEmit": true,
     "outDir": "dist",
     "lib": ["ESNext"],
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,

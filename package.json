@@ -3,6 +3,7 @@
   "version": "0.1.16",
   "description": "",
   "main": "dist/run.js",
+  "type": "module",
   "bin": {
     "webapp-build": "dist/run.js"
   },
@@ -26,7 +27,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@t8/date-format": "^1.0.9",
-    "esbuild": "^0.25.11"
+    "@t8/date-format": "^1.0.11",
+    "esbuild": "^0.27.0"
   }
 }

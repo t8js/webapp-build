@@ -1,5 +1,5 @@
-import { getEntries } from "./getEntries";
-import { getFirstAvailable } from "./getFirstAvailable";
+import { getEntries } from "./getEntries.ts";
+import { getFirstAvailable } from "./getFirstAvailable.ts";
 
 type EntryPoint = {
   name: string;

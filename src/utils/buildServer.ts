@@ -1,11 +1,11 @@
 import { access, unlink } from "node:fs/promises";
 import esbuild from "esbuild";
-import { commonBuildOptions } from "../const/commonBuildOptions";
-import type { BuildParams } from "../types/BuildParams";
-import { getEntryPoints } from "./getEntryPoints";
-import { getServerExternals } from "./getServerExternals";
-import { toImportPath } from "./toImportPath";
-import { writeModifiedFile } from "./writeModifiedFile";
+import { commonBuildOptions } from "../const/commonBuildOptions.ts";
+import type { BuildParams } from "../types/BuildParams.ts";
+import { getEntryPoints } from "./getEntryPoints.ts";
+import { getServerExternals } from "./getServerExternals.ts";
+import { toImportPath } from "./toImportPath.ts";
+import { writeModifiedFile } from "./writeModifiedFile.ts";
 
 export async function buildServer({ targetDir, init, skipInit }: BuildParams) {
   let [serverEntries, initEntries, external] = await Promise.all([

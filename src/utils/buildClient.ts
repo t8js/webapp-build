@@ -1,7 +1,7 @@
 import esbuild from "esbuild";
-import { commonBuildOptions } from "../const/commonBuildOptions";
-import type { BuildParams } from "../types/BuildParams";
-import { getEntryPoints } from "./getEntryPoints";
+import { commonBuildOptions } from "../const/commonBuildOptions.ts";
+import type { BuildParams } from "../types/BuildParams.ts";
+import { getEntryPoints } from "./getEntryPoints.ts";
 
 export async function buildClient({ publicAssetsDir }: BuildParams) {
   let clientEntries = await getEntryPoints(["client/index", "ui/index"]);
