@@ -9,11 +9,11 @@
     "webapp-build": "dist/run.js"
   },
   "scripts": {
-    "build": "npx npm-run-all clean compile types",
+    "build": "npx npm-run-all clean compile",
     "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
     "compile": "esbuild src/run.ts --bundle --outdir=dist --platform=node --external:esbuild --format=esm",
     "prepublishOnly": "npm run build",
-    "preversion": "npx npm-run-all typecheck shape build",
+    "preversion": "npx npm-run-all typecheck shape build types",
     "shape": "npx codeshape",
     "typecheck": "tsc --noEmit",
     "types": "tsc --emitDeclarationOnly"

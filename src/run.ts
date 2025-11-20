@@ -7,7 +7,7 @@ const defaultTargetDir = "dist";
 
 async function clean({ targetDir, publicAssetsDir }: BuildParams) {
   return Promise.all(
-    [`${targetDir}/init`, `${targetDir}/server`, `${publicAssetsDir}/-`].map(
+    [`${targetDir}/server`, `${publicAssetsDir}/-`].map(
       (dir) => rm(dir, { recursive: true, force: true }),
     ),
   );
@@ -27,8 +27,9 @@ async function run() {
     targetDir,
     publicAssetsDir,
     silent: args.includes("--silent"),
-    init: args.includes("--init"),
-    skipInit: args.includes("--skip-init"),
+    watch: args.includes("--watch"),
+    watchServer: args.includes("--watch-server"),
+    watchClient: args.includes("--watch-client"),
   };
 
   if (args.includes("--clean-only")) {
@@ -41,6 +42,4 @@ async function run() {
   await build(params);
 }
 
-(async () => {
-  await run();
-})();
+await run();
