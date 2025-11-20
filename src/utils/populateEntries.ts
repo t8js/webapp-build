@@ -6,8 +6,7 @@ export async function populateEntries() {
   let serverEntries = await getEntryPoints(["server", "server/index"]);
   let content = "";
 
-  if (serverEntries.length === 0)
-    content = "export const entries = [];";
+  if (serverEntries.length === 0) content = "export const entries = [];";
   else {
     content = "export const entries = (\n  await Promise.all([";
 

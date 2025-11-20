@@ -1,9 +1,12 @@
-import esbuild, { BuildOptions, Plugin } from "esbuild";
+import esbuild, { type BuildOptions, type Plugin } from "esbuild";
 import { commonBuildOptions } from "../const/commonBuildOptions.ts";
 import type { BuildParams } from "../types/BuildParams.ts";
 import { getEntryPoints } from "./getEntryPoints.ts";
 
-export async function buildClient({ publicAssetsDir, watch, watchClient }: BuildParams, plugins?: Plugin[]) {
+export async function buildClient(
+  { publicAssetsDir, watch, watchClient }: BuildParams,
+  plugins?: Plugin[],
+) {
   let clientEntries = await getEntryPoints(["ui/index"]);
 
   let buildOptions: BuildOptions = {

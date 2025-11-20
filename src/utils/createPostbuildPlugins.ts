@@ -1,4 +1,4 @@
-import { Plugin } from "esbuild";
+import type { Plugin } from "esbuild";
 
 export function createPostbuildPlugins(onRebuild: () => void) {
   let buildCount = 0;

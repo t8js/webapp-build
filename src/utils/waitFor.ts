@@ -8,8 +8,7 @@ export async function waitFor(path: string, timeout = 10000) {
       try {
         await access(path);
         resolve();
-      }
-      catch {
+      } catch {
         if (Date.now() - t0 > timeout) reject("timed out");
         else setTimeout(run, 1);
       }

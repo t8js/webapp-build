@@ -7,8 +7,8 @@ const defaultTargetDir = "dist";
 
 async function clean({ targetDir, publicAssetsDir }: BuildParams) {
   return Promise.all(
-    [`${targetDir}/server`, `${publicAssetsDir}/-`].map(
-      (dir) => rm(dir, { recursive: true, force: true }),
+    [`${targetDir}/server`, `${publicAssetsDir}/-`].map((dir) =>
+      rm(dir, { recursive: true, force: true }),
     ),
   );
 }

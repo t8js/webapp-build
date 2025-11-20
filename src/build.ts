@@ -1,9 +1,9 @@
+import { type ChildProcess, spawn } from "node:child_process";
 import { formatDuration } from "@t8/date-format";
 import type { BuildParams } from "./types/BuildParams.ts";
 import { buildClient } from "./utils/buildClient.ts";
 import { buildServer } from "./utils/buildServer.ts";
 import { createPostbuildPlugins } from "./utils/createPostbuildPlugins.ts";
-import { ChildProcess, spawn } from "node:child_process";
 import { waitFor } from "./utils/waitFor.ts";
 
 export async function build(params: BuildParams) {
