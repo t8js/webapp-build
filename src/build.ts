@@ -25,13 +25,12 @@ export async function build(params: BuildParams) {
       inited = true;
     }
 
-    serverProcess = spawn("node", [`${params.targetDir}/server/index.js`], { stdio: "inherit" });
+    serverProcess = spawn("node", [`${params.targetDir}/server/index.js`], {
+      stdio: "inherit",
+    });
   }
 
   let { serverPlugins } = createPostbuildPlugins(startServer);
 
-  await Promise.all([
-    buildServer(params, serverPlugins),
-    buildClient(params),
-  ]);
+  await Promise.all([buildServer(params, serverPlugins), buildClient(params)]);
 }
