@@ -29,13 +29,13 @@ export async function build(params: BuildParams) {
       });
   }
 
-  let { clientPlugins, serverPlugins } = createPostbuildPlugins(startServer);
+  let { serverPlugins } = createPostbuildPlugins(startServer);
 
   log("Build started");
 
   await Promise.all([
     buildServer(params, serverPlugins),
-    buildClient(params, clientPlugins),
+    buildClient(params),
   ]);
 
   log(`Build completed +${formatDuration(Date.now() - startTime)}`);

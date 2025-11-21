@@ -1,28 +1,6 @@
 import type { Plugin } from "esbuild";
 
-export function createPostbuildPlugins(onRebuild: () => void) {
-  let buildCount = 0;
-
-  function handleEnd() {
-    // Quit unless both the client and server build are completed.
-    if (buildCount < 1) {
-      buildCount++;
-      return;
-    }
-
-    onRebuild();
-    buildCount = 0;
-  }
-
-  let clientPlugins: Plugin[] = [
-    {
-      name: "postbuild-client",
-      setup(build) {
-        build.onEnd(handleEnd);
-      },
-    },
-  ];
-
+export function createPostbuildPlugins(onServerRebuild: () => void) {
   let serverPlugins: Plugin[] = [
     {
       name: "skip-css",
@@ -34,13 +12,14 @@ export function createPostbuildPlugins(onRebuild: () => void) {
     {
       name: "postbuild-server",
       setup(build) {
-        build.onEnd(handleEnd);
+        build.onEnd(() => {
+          onServerRebuild();
+        });
       },
     },
   ];
 
   return {
-    clientPlugins,
     serverPlugins,
   };
 }
