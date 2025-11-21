@@ -1,14 +1,13 @@
 import esbuild, { type BuildOptions, type Plugin } from "esbuild";
 import { commonBuildOptions } from "../const/commonBuildOptions.ts";
 import type { BuildParams } from "../types/BuildParams.ts";
-import { getServerExternals } from "./getServerExternals.ts";
 import { populateEntries } from "./populateEntries.ts";
 
 export async function buildServer(
   { targetDir, watch, watchServer }: BuildParams,
   plugins?: Plugin[],
 ) {
-  let [external] = await Promise.all([getServerExternals(), populateEntries()]);
+  await populateEntries();
 
   let buildOptions: BuildOptions = {
     ...commonBuildOptions,
@@ -18,7 +17,7 @@ export async function buildServer(
     outdir: `${targetDir}/server`,
     platform: "node",
     format: "esm",
-    external,
+    packages: "external",
     plugins,
   };
 
