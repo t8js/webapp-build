@@ -13,9 +13,7 @@ async function clean({ targetDir, publicAssetsDir }: BuildParams) {
   ];
 
   return Promise.all(
-    dirs.map((dir) =>
-      rm(dir, { recursive: true, force: true }),
-    ),
+    dirs.map((dir) => rm(dir, { recursive: true, force: true })),
   );
 }
 
