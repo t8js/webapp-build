@@ -6,8 +6,14 @@ import type { BuildParams } from "./types/BuildParams.ts";
 const defaultTargetDir = "dist";
 
 async function clean({ targetDir, publicAssetsDir }: BuildParams) {
+  let dirs = [
+    `${targetDir}/server`,
+    `${targetDir}/server-css`,
+    `${publicAssetsDir}/-`,
+  ];
+
   return Promise.all(
-    [`${targetDir}/server`, `${publicAssetsDir}/-`].map((dir) =>
+    dirs.map((dir) =>
       rm(dir, { recursive: true, force: true }),
     ),
   );

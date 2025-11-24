@@ -4,6 +4,7 @@ import type { BuildParams } from "./types/BuildParams.ts";
 import { buildClient } from "./utils/buildClient.ts";
 import { buildServer } from "./utils/buildServer.ts";
 import { createPostbuildPlugins } from "./utils/createPostbuildPlugins.ts";
+import { buildServerCSS } from "./utils/buildServerCSS.ts";
 
 export async function build(params: BuildParams) {
   let startTime = Date.now();
@@ -30,7 +31,11 @@ export async function build(params: BuildParams) {
     });
   }
 
-  let { serverPlugins } = createPostbuildPlugins(startServer);
+  let { serverPlugins, serverCSSPlugins } = createPostbuildPlugins(params, startServer);
 
-  await Promise.all([buildServer(params, serverPlugins), buildClient(params)]);
+  await Promise.all([
+    buildServer(params, serverPlugins),
+    buildServerCSS(params, serverCSSPlugins),
+    buildClient(params),
+  ]);
 }

@@ -3,6 +3,12 @@ import { commonBuildOptions } from "../const/commonBuildOptions.ts";
 import type { BuildParams } from "../types/BuildParams.ts";
 import { getEntryPoints } from "./getEntryPoints.ts";
 
+/**
+ * Builds the client-side code from the 'src/entries/<entry_name>/ui'
+ * directories. The directories should preferrably be called 'ui' rather
+ * than client since their contents can also be used with the server-side
+ * rendering.
+ */
 export async function buildClient(
   { publicAssetsDir, watch, watchClient }: BuildParams,
   plugins?: Plugin[],
