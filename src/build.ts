@@ -15,7 +15,7 @@ export async function build(params: BuildParams) {
   let serverProcess: ChildProcess | null = null;
   let inited = false;
 
-  function startServer() {
+  function handleServerRebuild() {
     if (serverProcess) {
       serverProcess.kill();
       serverProcess = null;
@@ -26,14 +26,15 @@ export async function build(params: BuildParams) {
       inited = true;
     }
 
-    serverProcess = spawn("node", [`${params.targetDir}/server/index.js`], {
-      stdio: "inherit",
-    });
+    if (params.start)
+      serverProcess = spawn("node", [`${params.targetDir}/server/index.js`], {
+        stdio: "inherit",
+      });
   }
 
   let { serverPlugins, serverCSSPlugins } = createPostbuildPlugins(
     params,
-    startServer,
+    handleServerRebuild,
   );
 
   await Promise.all([

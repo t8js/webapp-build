@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { rm } from "node:fs/promises";
 import { build } from "./build.ts";
 import type { BuildParams } from "./types/BuildParams.ts";
@@ -17,8 +16,7 @@ async function clean({ targetDir, publicAssetsDir }: BuildParams) {
   );
 }
 
-async function run() {
-  let args = process.argv.slice(2);
+export async function cli(args: string[] = []) {
   let publicAssetsDir = args[0];
   let targetDir = args[1];
 
@@ -46,5 +44,3 @@ async function run() {
 
   await build(params);
 }
-
-await run();

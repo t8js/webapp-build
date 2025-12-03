@@ -2,16 +2,21 @@
   "name": "@t8/webapp-build",
   "version": "0.2.2",
   "description": "",
-  "main": "dist/run.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "webapp-build": "dist/run.js"
+    "webapp-build": "dist/bin/build.js",
+    "webapp-dev": "dist/bin/startDev.js",
+    "webapp-prod": "dist/bin/startProd.js"
   },
   "scripts": {
-    "build": "npx npm-run-all clean compile",
+    "build": "npx npm-run-all clean -p compile compile-build compile-start-dev compile-start-prod",
     "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
-    "compile": "esbuild src/run.ts --bundle --outdir=dist --platform=node --external:esbuild --format=esm",
+    "compile": "esbuild index.ts --bundle --outfile=dist/index.js --platform=node --external:esbuild --format=esm",
+    "compile-build": "esbuild src/bin/build.ts --bundle --outfile=dist/bin/build.js --platform=node --external:esbuild --format=esm",
+    "compile-start-dev": "esbuild src/bin/startDev.ts --bundle --outfile=dist/bin/startDev.js --platform=node --external:esbuild --format=esm",
+    "compile-start-prod": "esbuild src/bin/startProd.ts --bundle --outfile=dist/bin/startProd.js --platform=node --external:esbuild --format=esm",
     "prepublishOnly": "npm run build",
     "preversion": "npx npm-run-all typecheck shape build types",
     "shape": "npx codeshape",
