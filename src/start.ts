@@ -13,6 +13,6 @@ export async function start(nodeEnv = "development", host?: string) {
   await cli(
     nodeEnv === "development"
       ? ["src/public", "--clean", "--start", "--watch"]
-      : ["src/public", "--clean", "--start", "--silent"]
+      : ["src/public", "--clean", "--start", "--silent"],
   );
 }
