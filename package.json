@@ -17,7 +17,7 @@
     "compile-build": "esbuild src/bin/build.ts --bundle --outfile=dist/bin/build.js --platform=node --external:esbuild --format=esm",
     "compile-start-dev": "esbuild src/bin/startDev.ts --bundle --outfile=dist/bin/startDev.js --platform=node --external:esbuild --format=esm",
     "compile-start-prod": "esbuild src/bin/startProd.ts --bundle --outfile=dist/bin/startProd.js --platform=node --external:esbuild --format=esm",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npx npm-run-all build types",
     "preversion": "npx npm-run-all typecheck shape build types",
     "shape": "npx codeshape",
     "typecheck": "tsc --noEmit",
