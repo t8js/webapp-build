@@ -34,6 +34,7 @@ async function run() {
     watch: args.includes("--watch"),
     watchServer: args.includes("--watch-server"),
     watchClient: args.includes("--watch-client"),
+    start: args.includes("--start"),
   };
 
   if (args.includes("--clean-only")) {

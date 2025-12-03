@@ -5,4 +5,5 @@ export type BuildParams = {
   watch?: boolean;
   watchClient?: boolean;
   watchServer?: boolean;
+  start?: boolean;
 };

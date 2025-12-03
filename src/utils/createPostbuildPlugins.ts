@@ -3,8 +3,8 @@ import type { Plugin } from "esbuild";
 import type { BuildParams } from "../types/BuildParams.ts";
 
 export function createPostbuildPlugins(
-  { targetDir, publicAssetsDir }: BuildParams,
-  onServerRebuild: () => void,
+  { targetDir, publicAssetsDir, start }: BuildParams,
+  onServerRebuild: (() => void) | null | undefined,
 ) {
   let serverPlugins: Plugin[] = [
     {
@@ -14,15 +14,19 @@ export function createPostbuildPlugins(
         build.onLoad({ filter: /\.css$/ }, () => ({ contents: "" }));
       },
     },
-    {
-      name: "postbuild-server",
-      setup(build) {
-        build.onEnd(() => {
-          onServerRebuild();
-        });
-      },
-    },
   ];
+
+  if (start && onServerRebuild)
+    serverPlugins.push(
+      {
+        name: "postbuild-server",
+        setup(build) {
+          build.onEnd(() => {
+            onServerRebuild();
+          });
+        },
+      },
+    );
 
   let serverCSSPlugins: Plugin[] = [
     {
