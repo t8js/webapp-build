@@ -7,9 +7,9 @@
   "types": "./dist/index.d.ts",
   "type": "module",
   "bin": {
-    "webapp-build": "dist/bin/build.js",
-    "webapp-dev": "dist/bin/startDev.js",
-    "webapp-prod": "dist/bin/startProd.js"
+    "webapp-build": "./dist/bin/build.js",
+    "webapp-dev": "./dist/bin/startDev.js",
+    "webapp-prod": "./dist/bin/startProd.js"
   },
   "scripts": {
     "compile-build": "esbuild src/bin/build.ts --bundle --outfile=dist/bin/build.js --platform=node --external:esbuild --format=esm",
@@ -25,11 +25,10 @@
   "author": "axtk",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^24.7.2",
-    "typescript": "^5.9.3"
+    "@types/node": "^24.7.2"
   },
   "dependencies": {
-    "@t8/date-format": "^1.0.12",
-    "esbuild": "^0.27.0"
+    "@t8/date-format": "^1.0.16",
+    "esbuild": "^0.27.1"
   }
 }
